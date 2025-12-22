@@ -6,13 +6,42 @@ using UnityEngine.Serialization;
 
 public class Player : MonoBehaviour
 {
+    public static Player Instance { get; private set; }
+    public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
+    public class OnSelectedCounterChangedEventArgs : EventArgs
+    {
+        public ClearCounter selectedCounter;
+    }
+    
     [FormerlySerializedAs("moveSpeed"),SerializeField] private float _moveSpeed = 5f;
     [FormerlySerializedAs("gameInput"),SerializeField] private GameInput _gameInput;
     [SerializeField] private LayerMask _counterInteractLayerMask;
     
     private bool m_isWalking = false;
     private Vector3 m_lastInteractDirection;
-    
+    private ClearCounter m_SelectedCounter;
+
+    void Awake()
+    {
+        if (Instance != null)
+        {
+            Debug.LogError("Multiple instances of Player");
+        }
+        Instance = this;
+    }
+
+    void Start()
+    {
+        _gameInput.OnInteractAction += GameInputOnOnInteractAction;
+    }
+    void GameInputOnOnInteractAction(object sender, EventArgs e)
+    {
+        if (m_SelectedCounter != null)
+        {
+            m_SelectedCounter.Interact();
+        }
+    }
+
     void Update()
     {
         HandleMovement();
@@ -34,10 +63,32 @@ public class Player : MonoBehaviour
         {
             if (hit.transform.TryGetComponent<ClearCounter>(out ClearCounter clearCounter))
             {
-                clearCounter.Interact();
+                if (m_SelectedCounter != clearCounter)
+                {
+                    SetSelectCounter(clearCounter);
+                }
+            }
+            else
+            {
+                SetSelectCounter(null);
             }
         }
+        else
+        {
+            SetSelectCounter(null);
+        }
         
+        Debug.Log(m_SelectedCounter);
+        
+    }
+    void SetSelectCounter(ClearCounter clearCounter)
+    {
+
+        m_SelectedCounter = clearCounter;
+        OnSelectedCounterChanged?.Invoke(this, new OnSelectedCounterChangedEventArgs
+        {
+            selectedCounter = m_SelectedCounter
+        });
     }
     private void HandleMovement()
     {
