@@ -77,9 +77,6 @@ public class Player : MonoBehaviour
         {
             SetSelectCounter(null);
         }
-        
-        Debug.Log(m_SelectedCounter);
-        
     }
     void SetSelectCounter(ClearCounter clearCounter)
     {
