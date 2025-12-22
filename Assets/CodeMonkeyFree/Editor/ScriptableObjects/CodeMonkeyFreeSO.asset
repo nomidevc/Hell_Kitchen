@@ -14,33 +14,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentVersion: 1.01
   subtype: kitchenchaos
-  lastShownTimestamp: 1766300974
+  lastShownTimestamp: 1766388417
   lastUpdateResponse:
     version: 1.01
     versionUrl: https://unitycodemonkey.com
-  checkedLastUpdateTimestamp: 1766300974
+  checkedLastUpdateTimestamp: 1766388417
   lastQOTDResponse:
-    questionId: 253
-    questionText: Which of these are affected when you modify Time.timeScale?
-    answerA: Time.deltaTime, Time.realtimeSinceStartup, Time.unscaledDeltaTime, Time.timeSinceLevelLoad,
-      Time.fixedTime
-    answerB: Time.deltaTime, Time.realtimeSinceStartup, Time.timeSinceLevelLoad,
-      Time.fixedTime
-    answerC: Time.deltaTime, Time.timeSinceLevelLoad, Time.fixedTime
+    questionId: 254
+    questionText: 'Is there a problem with this code?
+
+      <p>private void SetCameraFollowFunc(Func&lt;Vector3&gt;
+      cameraFollowFunc) { }</p>
+
+      <p>SetCameraFollowFunc(() =&gt; new Vector3(1,
+      0, 0));</p>'
+    answerA: No
+    answerB: 'Should be: SetCameraFollowFunc(() =&#62; return new Vector3(1, 0, 0));'
+    answerC: 'Should be: SetCameraFollowFunc((Vector3(1, 0, 0)) =&#62; { });'
     answerD: 
     answerE: 
-  lastQotdTimestamp: 1766300974
+  lastQotdTimestamp: 1766388417
   lastDynamicHeaderResponse:
     topImageUrl: https://codemonkeyexternal.blob.core.windows.net/external/Misc/problemSolvingCourse_BonusesEndingMonth.png
     topText: The Special Bonuses on my Problem Solving course are ending this month!
     topLink: problemsolvingcourse
     bottomText: My 10+ Years of C# Knowledge in 1 Course!
     bottomLink: csharpcourse
-  lastDynamicHeaderTimestamp: 1766300974
+  lastDynamicHeaderTimestamp: 1766388417
   websiteLatestMessage:
     text: <a href="https://cmonkey.co/freecourses">Check out all my FREE courses!
       Click here!</a>
-  websiteLatestMessageTimestamp: 1766300974
+  websiteLatestMessageTimestamp: 1766388417
   websiteLatestVideos:
     videos:
     - youTubeId: f_zWWVFKwho
@@ -51,4 +55,4 @@ MonoBehaviour:
       title: FREE DOWNLOAD 56 Project Files!
     - youTubeId: OwxThbyAmOw
       title: TOP 10 FREE NEW Assets DECEMBER 2025!
-  websiteLatestVideosTimestamp: 1766300974
+  websiteLatestVideosTimestamp: 1766388417
