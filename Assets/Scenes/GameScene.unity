@@ -158,7 +158,7 @@ MeshCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
@@ -704,8 +704,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7a0fff279fa3744481fee834c9c4040, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
-  gameInput: {fileID: 466238175}
+  _moveSpeed: 5
+  _gameInput: {fileID: 466238175}
 --- !u!4 &690579482
 Transform:
   m_ObjectHideFlags: 0

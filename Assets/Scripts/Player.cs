@@ -14,9 +14,44 @@ public class Player : MonoBehaviour
     void Update()
     {
         Vector2 inputVector = _gameInput.GetMovementVectorNormalized();
-        
         Vector3 moveDir = new Vector3(inputVector.x, 0, inputVector.y);
-        transform.position += moveDir * (Time.deltaTime * _moveSpeed);
+        
+        float moveDistance = Time.deltaTime * _moveSpeed;
+        float playerHeight = 2f;
+        float playerSize = .7f;
+        bool canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight,
+            playerSize, moveDir, moveDistance);
+
+        if (!canMove) // Can not move in the moveDir
+        {
+            Vector3 moveDirX = new Vector3(moveDir.x, 0, 0).normalized;
+            canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight,
+                playerSize, new Vector3(moveDirX.x, 0, 0), moveDistance);
+            if (canMove) // Can move only in the x dir
+            {
+                moveDir = moveDirX;
+            }
+            else
+            {
+                Vector3 moveDirZ = new Vector3(0, 0, moveDir.z).normalized;
+                canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight,
+                    playerSize, new Vector3(0, 0, moveDirZ.y), moveDistance);
+                if (canMove) // Can move only in the z dir
+                {
+                    moveDir = moveDirZ;
+                }
+                else
+                {
+                    // Can not move in any dir
+                }
+            }
+            
+        }
+        
+        if (canMove)
+        {
+            transform.position += moveDir * moveDistance;
+        }
         
         m_isWalking = moveDir != Vector3.zero;
         
