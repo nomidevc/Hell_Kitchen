@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IKitchenObjectParent
 {
     public static Player Instance { get; private set; }
     public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
@@ -17,9 +17,12 @@ public class Player : MonoBehaviour
     [FormerlySerializedAs("gameInput"),SerializeField] private GameInput _gameInput;
     [SerializeField] private LayerMask _counterInteractLayerMask;
     
+    [SerializeField] private Transform _kitchenObjectHoldPoint;
+    
     private bool m_isWalking = false;
     private Vector3 m_lastInteractDirection;
     private ClearCounter m_SelectedCounter;
+    private KitchenObject m_kitchenObject;
 
     void Awake()
     {
@@ -38,7 +41,7 @@ public class Player : MonoBehaviour
     {
         if (m_SelectedCounter != null)
         {
-            m_SelectedCounter.Interact();
+            m_SelectedCounter.Interact(this);
         }
     }
 
@@ -58,8 +61,8 @@ public class Player : MonoBehaviour
             m_lastInteractDirection = moveDir;
         }
         
-        float interacDistance = 2f;
-        if (Physics.Raycast(transform.position, m_lastInteractDirection, out RaycastHit hit, interacDistance, _counterInteractLayerMask))
+        float interactDistance = 2f;
+        if (Physics.Raycast(transform.position, m_lastInteractDirection, out RaycastHit hit, interactDistance, _counterInteractLayerMask))
         {
             if (hit.transform.TryGetComponent<ClearCounter>(out ClearCounter clearCounter))
             {
@@ -138,5 +141,29 @@ public class Player : MonoBehaviour
     public bool IsWalking()
     {
         return m_isWalking;
+    }
+    public Transform GetKitchenObjectFollowTransform()
+    {
+        return _kitchenObjectHoldPoint;
+    }
+
+    public void SetKitchenObject(KitchenObject kitchenObject)
+    {
+        m_kitchenObject = kitchenObject;
+    }
+
+    public KitchenObject GetKitchenObject()
+    {
+        return m_kitchenObject;
+    }
+    
+    public void ClearKitchenObject()
+    {
+        m_kitchenObject = null;
+    }
+    
+    public bool HasKitchenObject()
+    {
+        return m_kitchenObject != null;
     }
 }

@@ -1,39 +1,40 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.TestTools;
 
 public class KitchenObject : MonoBehaviour
 {
-    [SerializeField] private KitchenObjectSO kitchenObjectSO;
+    [FormerlySerializedAs("kitchenObjectSO"),SerializeField] private KitchenObjectSO _kitchenObjectSO;
 
-    private ClearCounter m_clearCounter;
+    private IKitchenObjectParent m_kitchenObjectParent;
     
     public KitchenObjectSO GetKitchenObjectSO()
     {
-        return kitchenObjectSO;
+        return _kitchenObjectSO;
     }
     
-    public void SetClearCounter(ClearCounter clearCounter)
+    public void SetKitchenObjectParent(IKitchenObjectParent kitchenObjectParent)
     {
-        if (this.m_clearCounter != null)
+        if (this.m_kitchenObjectParent != null)
         {
-            m_clearCounter.ClearKitchenObject();
+            m_kitchenObjectParent.ClearKitchenObject();
         }
         
-        m_clearCounter = clearCounter;
-        if (clearCounter.HasKitchenObject())
+        m_kitchenObjectParent = kitchenObjectParent;
+        if (kitchenObjectParent.HasKitchenObject())
         {
             Debug.LogError("Counter already has a kitchen object!");
         }
         
-        m_clearCounter.SetKitchenObject(this);
-        transform.parent = clearCounter.GetKitcherObjectFollowTransform();
+        m_kitchenObjectParent.SetKitchenObject(this);
+        transform.parent = kitchenObjectParent.GetKitchenObjectFollowTransform();
         transform.localPosition = Vector3.zero;
     }
 
-    public ClearCounter GetClearCounter()
+    public IKitchenObjectParent GetKitchenObjectParent()
     {
-        return this.m_clearCounter;
+        return this.m_kitchenObjectParent;
     }
 }
