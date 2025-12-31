@@ -4,13 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CuttingCounter : BaseCounter
+public class CuttingCounter : BaseCounter, IHasProgress
 {
-    public event EventHandler<OnCuttingProgressChangedEventArgs> OnCuttingProgressChanged;
-    public class OnCuttingProgressChangedEventArgs : EventArgs
-    {
-        public float cuttingProgressNormalized;
-    }
+    public event EventHandler<IHasProgress.OnProgressChangedEventArgs> OnProgressChanged;
 
     public event EventHandler OnCutting;
     
@@ -28,9 +24,9 @@ public class CuttingCounter : BaseCounter
                 m_cuttingProgress = 0;
                 
                 CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeSOWithInput(GetKitchenObject().GetKitchenObjectSO());
-                OnCuttingProgressChanged?.Invoke(this, new OnCuttingProgressChangedEventArgs()
+                OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs()
                 {
-                    cuttingProgressNormalized = (float)m_cuttingProgress / cuttingRecipeSO.cuttingProgressMax
+                    progressNormalized = (float)m_cuttingProgress / cuttingRecipeSO.cuttingProgressMax
                 });
             }
             else
@@ -60,9 +56,9 @@ public class CuttingCounter : BaseCounter
             m_cuttingProgress++;
             CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeSOWithInput(inputKitchenObjectSo);
             OnCutting?.Invoke(this, EventArgs.Empty);
-            OnCuttingProgressChanged?.Invoke(this, new OnCuttingProgressChangedEventArgs()
+            OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs()
             {
-                cuttingProgressNormalized = (float)m_cuttingProgress / cuttingRecipeSO.cuttingProgressMax
+                progressNormalized = (float)m_cuttingProgress / cuttingRecipeSO.cuttingProgressMax
             });
             
             if (m_cuttingProgress >= cuttingRecipeSO.cuttingProgressMax)
