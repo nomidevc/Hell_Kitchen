@@ -8,6 +8,9 @@ public class DeliveryManager : MonoBehaviour
     public event EventHandler OnRecipeSpawned;
     public event EventHandler OnRecipeCompleted;
     
+    public event EventHandler OnDeliverySuccess;
+    public event EventHandler OnDeliveryFailed;
+    
     public static DeliveryManager Instance { get; private set; }
     
     [SerializeField] private RecipeListSO _recipeListSO;
@@ -58,7 +61,7 @@ public class DeliveryManager : MonoBehaviour
                 foreach (KitchenObjectSO recipeKitchenObjSO in waitingRecipeSO.RecipeKitchenObjectSOList)
                 {
                     bool foundMatchRecipe = false;
-                    foreach (KitchenObjectSO recipeInPlate in deliveredPlate.GetKitchenObjectSOList())   
+                    foreach (KitchenObjectSO recipeInPlate in deliveredPlate.GetKitchenObjectSOList())
                     {
                         if (recipeInPlate == recipeKitchenObjSO)
                         {
@@ -71,18 +74,18 @@ public class DeliveryManager : MonoBehaviour
                         foundMatchesPlate = false;
                     }
                 }
-                if (foundMatchesPlate)
+                if (foundMatchesPlate) // Delivered plate matches waiting recipe
                 {
                     m_waitingRecipeSOList.RemoveAt(i);
                     OnRecipeCompleted?.Invoke(this, EventArgs.Empty);
+                    OnDeliverySuccess?.Invoke(this, EventArgs.Empty);
                     return;
-                }
-                else
-                {
-                    Debug.Log("Delivered Recipe Failed: " + waitingRecipeSO.FoodName);
                 }
             }
         }
+        // No matches found
+        OnDeliveryFailed?.Invoke(this, EventArgs.Empty);
+        return;
     }
     
     public List<RecipeSO> GetWaitingRecipeSOList()
