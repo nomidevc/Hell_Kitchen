@@ -22,6 +22,8 @@ public class DeliveryManager : MonoBehaviour
     
     private int m_maxWaitingRecipeCount = 4;
     
+    private int m_successfulDeliveryAmount = 0;
+    
     private void Awake()
     {
         if (Instance != null)
@@ -77,6 +79,7 @@ public class DeliveryManager : MonoBehaviour
                 if (foundMatchesPlate) // Delivered plate matches waiting recipe
                 {
                     m_waitingRecipeSOList.RemoveAt(i);
+                    m_successfulDeliveryAmount++;
                     OnRecipeCompleted?.Invoke(this, EventArgs.Empty);
                     OnDeliverySuccess?.Invoke(this, EventArgs.Empty);
                     return;
@@ -91,6 +94,11 @@ public class DeliveryManager : MonoBehaviour
     public List<RecipeSO> GetWaitingRecipeSOList()
     {
         return m_waitingRecipeSOList;
+    }
+    
+    public int GetSuccessfulDeliveryAmount()
+    {
+        return m_successfulDeliveryAmount;
     }
 
 }

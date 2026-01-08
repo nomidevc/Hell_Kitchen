@@ -4,25 +4,22 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class GameStartCountdownUI : MonoBehaviour
+public class GameOverUI : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI m_countdownText;
-
+    [SerializeField] private TextMeshProUGUI m_recipeSuccessText;
+    
     void Start()
     {
         GameManager.Instance.OnStateChanged += GameManager_OnStateChanged;
         Hide();
     }
-
-    void Update()
-    {
-        m_countdownText.text = Mathf.Ceil(GameManager.Instance.GetCountdownToStartTimer()).ToString();
-    }
+    
 
     private void GameManager_OnStateChanged(object sender, EventArgs e)
     {
-        if (GameManager.Instance.IsCountdownToStartActive())
+        if (GameManager.Instance.IsGameOverActive())
         {
+            m_recipeSuccessText.text = DeliveryManager.Instance.GetSuccessfulDeliveryAmount().ToString();
             Show();
         }
         else
@@ -32,7 +29,7 @@ public class GameStartCountdownUI : MonoBehaviour
     }
     private void Show()
     {
-       gameObject.SetActive(true);
+        gameObject.SetActive(true);
     }
     
     private void Hide()
